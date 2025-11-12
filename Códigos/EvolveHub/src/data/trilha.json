@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "nome": "Lógica de Programação",
+        "descricao": "Fundamentos essenciais para qualquer linguagem. Inclui algoritmos, pseudocódigo e estruturas de dados básicas.",
+        "status": "concluido",
+        "icone": "✅"
+    },
+    {
+        "id": 2,
+        "nome": "Python Essencial",
+        "descricao": "Aprende os conceitos de Python, manipulação de strings, listas, dicionários e funções.",
+        "status": "em_progresso",
+        "icone": "🔥"
+    },
+    {
+        "id": 3,
+        "nome": "Introdução à Inteligência Artificial",
+        "descricao": "Explora os conceitos básicos de IA, machine learning e como ela está a transformar o trabalho.",
+        "status": "bloqueado",
+        "icone": "🔒"
+    },
+    {
+        "id": 4,
+        "nome": "UX Writing e Comunicação Eficaz",
+        "descricao": "Como criar interfaces intuitivas e comunicar de forma clara com o utilizador.",
+        "status": "bloqueado",
+        "icone": "🔒"
+    },
+    {
+        "id": 5,
+        "nome": "Desenvolvimento Web com React",
+        "descricao": "Construção de interfaces de utilizador interativas e dinâmicas com a biblioteca React.",
+        "status": "bloqueado",
+        "icone": "🔒"
+    }
+]
