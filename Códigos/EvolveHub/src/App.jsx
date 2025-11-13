@@ -1,30 +1,96 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom' // Remove 'Link' e 'Container' se não estiverem a ser usados diretamente aqui
-import { Container } from 'react-bootstrap' // Certifica-te que está importado, pois usas <Container>
+// src/App.jsx
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-// Importa as tuas páginas
-import Dashboard from './pages/Dashboard'
-import Trilha from './pages/Trilha'
-import LabIA from './pages/LabIA'
-import Admin from './pages/Admin'
+// Importar o Bootstrap CSS
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
-// Importa o teu componente de Navegação
-import AppNavbar from './components/Navbar'
+// Importar seu componente Navbar
+import AppNavbar from './components/Navbar'; // (ou Navbrar.jsx se você manteve o nome com erro de digitação)
+
+// Importar suas páginas
+import Dashboard from './pages/Dashboard';
+import Trilha from './pages/Trilha';
+import LabIA from './pages/LabIA';
+import Profile from './pages/Profile';
+import Admin from './pages/Admin';
+import Login from './pages/Login'; // Importar a página de Login
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
     <BrowserRouter>
-      <AppNavbar />
+      
+      {isLoggedIn && <AppNavbar onLogout={handleLogout} />}
+      
+      <Routes>
+        {/* Rota de Login */}
+        <Route 
+          path="/login" 
+          element={
+            isLoggedIn 
+              ? <Navigate to="/dashboard" />
+              : <Login onLoginSuccess={handleLogin} />
+          } 
+        />
 
-      <Container className="mt-4"> {/* <Container> é do React-Bootstrap, precisa de ser importado */}
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/trilha" element={<Trilha />} />
-          <Route path="/lab-ia" element={<LabIA />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </Container>
+        {/* Rota Raiz (/) */}
+        <Route 
+          path="/" 
+          element={
+            isLoggedIn 
+              ? <Navigate to="/dashboard" />
+              : <Navigate to="/login" />
+          } 
+        />
+
+        {/* Rotas Protegidas */}
+        <Route 
+          path="/dashboard" 
+          element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/trilha" 
+          element={isLoggedIn ? <Trilha /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/lab-ia" 
+          element={isLoggedIn ? <LabIA /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/profile" 
+          element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/admin" 
+          element={isLoggedIn ? <Admin /> : <Navigate to="/login" />} 
+        />
+        
+        {/* Rotas da sidebar do Perfil */}
+        <Route 
+          path="/ajuda" 
+          element={isLoggedIn ? <div>Página de Ajuda</div> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/settings" 
+          element={isLoggedIn ? <div>Página de Configurações</div> : <Navigate to="/login" />} 
+        />
+
+        {/* Rota "catch-all" */}
+        <Route path="*" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />} />
+      </Routes>
+      
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

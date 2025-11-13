@@ -31,7 +31,7 @@ function CardBemEstar() {
     return (
         <Card className="mb-4"> {/* mb-4 adiciona uma margem inferior */}
             <Card.Body>
-                <Card.Title className="h5">Como te sentes hoje?</Card.Title> {/* h5 para tamanho de título */}
+                <Card.Title className="h5">Como esta se sentindo hoje?</Card.Title> {/* h5 para tamanho de título */}
                 <Card.Text className="text-muted">
                     Ajuda-nos a entender o teu bem-estar para otimizar o teu dia.
                 </Card.Text>

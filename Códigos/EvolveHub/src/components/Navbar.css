@@ -1,0 +1,79 @@
+/* src/components/AppNavbar.css */
+
+/* 1. Estilo da Barra de Navegação Principal */
+.main-navbar {
+  background-color: #ffffff !important; /* Fundo branco */
+  border-bottom: 1px solid #e9ecef;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+/* 2. Estilo do Logo "EvolveHub" */
+.navbar-logo-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a2a44 !important; /* Cor escura do "Redo" */
+  transition: color 0.2s ease;
+}
+
+.navbar-logo-brand:hover {
+  color: #1a2a44 !important; 
+}
+
+/* 3. Estilo dos Links de Texto (Inicio, Trilha...) */
+.nav-link-custom {
+  color: #495057 !important; /* Cinza escuro */
+  font-weight: 500;
+  font-size: 1rem;
+  margin: 0 0.5rem;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-link-custom:hover {
+  color: #1a2a44 !important;
+  background-color: #f1f3f5;
+}
+
+/* 4. Estilo do Ícone de Perfil */
+.navbar-profile-icon {
+  color: #6c757d !important; /* Cor do ícone (cinza) */
+  background-color: #f1f3f5;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.navbar-profile-icon:hover {
+  color: #ffffff !important; /* Branco no hover */
+  background-color: #FD7E14; /* Sua cor laranja */
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(253, 126, 20, 0.3);
+}
+
+/* 5. Ajustes para Mobile (quando o menu colapsa) */
+@media (max-width: 991.98px) {
+  .nav-link-custom {
+    margin: 0.25rem 0; /* Espaçamento vertical */
+  }
+
+  .navbar-profile-icon {
+    margin-top: 0.5rem;
+    width: fit-content; /* Ajusta ao tamanho do ícone */
+    background-color: transparent;
+    color: #6c757d !important;
+    padding-left: 0.75rem !important;
+  }
+
+  .navbar-profile-icon:hover {
+    background-color: #f1f3f5;
+    color: #FD7E14 !important;
+    transform: none;
+    box-shadow: none;
+  }
+}

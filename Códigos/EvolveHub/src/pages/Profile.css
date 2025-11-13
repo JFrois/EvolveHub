@@ -1,0 +1,267 @@
+/* src/pages/Profile.css */
+
+/* 1. Layout Principal da Aplicação */
+.profile-layout {
+  display: flex;
+  min-height: 100vh;
+  /* Fundo sutil da sua paleta */
+  background: radial-gradient(at 80% 20%, hsla(45, 100%, 94%, 0.5) 0px, transparent 50%),
+              radial-gradient(at 20% 80%, hsla(207, 100%, 94%, 0.5) 0px, transparent 50%),
+              #f8f9fa; /* Fundo principal cinza bem claro */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 2. Barra Lateral (Sidebar) */
+.profile-sidebar {
+  width: 80px; /* Largura da barra lateral */
+  background-color: #ffffff;
+  border-right: 1px solid #e9ecef;
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  position: fixed;
+  height: 100%;
+  z-index: 100;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sidebar-link {
+  color: #6c757d; /* Cor do ícone (cinza) */
+  font-size: 1.5rem; /* Tamanho do ícone */
+  padding: 0.75rem;
+  border-radius: 12px;
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar-link:hover {
+  color: #FD7E14; /* Laranja no hover */
+  background-color: #fff8e1;
+}
+
+/* Ícone Ativo (com sua cor laranja) */
+.sidebar-link.active {
+  background-color: #FD7E14;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(253, 126, 20, 0.3);
+}
+
+/* 3. Conteúdo Principal (Área à direita) */
+.profile-main-content {
+  margin-left: 80px; /* Empurra o conteúdo para depois da sidebar */
+  flex-grow: 1; /* Ocupa o resto do espaço */
+  padding: 1.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 4. Cabeçalho (Topo com Boas-vindas e Pesquisa) */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.header-welcome h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0;
+}
+
+.header-welcome p {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.search-bar-container {
+  position: relative;
+  width: 300px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+}
+
+.search-bar {
+  border-radius: 8px !important;
+  border: 1px solid #e9ecef !important;
+  background-color: #ffffff !important;
+  padding-left: 2.5rem !important; /* Espaço para o ícone */
+  box-shadow: none !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-bar:focus {
+  border-color: #FD7E14 !important;
+  box-shadow: 0 0 0 3px rgba(253, 126, 20, 0.15) !important;
+}
+
+.header-avatar {
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+
+/* 5. Área de Conteúdo do Perfil (Card Branco) */
+.profile-content-area {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* Importante para o banner */
+  flex-grow: 1;
+}
+
+.profile-banner {
+  height: 160px;
+  /* Seu gradiente */
+  background: linear-gradient(105deg, 
+    hsla(27, 98%, 68%, 0.8), 
+    hsla(40, 96%, 68%, 0.8) 30%, 
+    hsla(190, 80%, 80%, 0.6) 100%
+  );
+}
+
+.profile-avatar-section {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 2rem;
+  /* Puxa a seção do avatar para cima do banner */
+  margin-top: -48px; 
+}
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar-info {
+  margin-left: 1rem;
+  margin-bottom: 0.5rem; /* Alinha com a base do avatar */
+  flex-grow: 1;
+}
+
+.profile-avatar-info h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0;
+}
+
+.profile-avatar-info p {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Botão de Editar com sua cor Laranja */
+.btn-edit-profile {
+  background-color: #FD7E14 !important;
+  border-color: #FD7E14 !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 8px !important;
+  padding: 0.5rem 1rem !important;
+  margin-bottom: 0.5rem; /* Alinha com o texto */
+}
+
+/* 6. Formulário */
+.profile-form-container {
+  padding: 2.5rem 2rem;
+}
+
+.form-section {
+  margin-bottom: 1.5rem;
+}
+
+.form-section label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+
+/* Estilo dos inputs e selects */
+.form-section .form-control,
+.form-section .form-select {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  color: #343a40;
+  font-size: 0.95rem;
+}
+
+.form-section .form-control:focus,
+.form-section .form-select:focus {
+  background-color: #ffffff;
+  border-color: #FD7E14;
+  box-shadow: 0 0 0 3px rgba(253, 126, 20, 0.15);
+}
+
+/* 7. Seção de Email */
+.email-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 1rem;
+}
+
+.email-item {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.email-icon {
+  font-size: 1.25rem;
+  color: #4a6f98; /* Azul da sua paleta */
+  margin-right: 1rem;
+}
+
+.email-info p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #343a40;
+}
+
+.email-info span {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.btn-add-email {
+  background-color: transparent !important;
+  border: 1px solid #dee2e6 !important;
+  color: #FD7E14 !important; /* Laranja */
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 8px !important;
+  padding: 0.5rem 1rem !important;
+  margin-top: 1rem;
+  transition: all 0.2s ease;
+}
+
+.btn-add-email:hover {
+  background-color: #fff8e1 !important;
+  border-color: #FD7E14 !important;
+}

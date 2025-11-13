@@ -1,0 +1,151 @@
+/* src/pages/Trilha.css */
+
+/* 1. Fundo da Página (Layout Trello) */
+.trilha-page {
+  background-color: #f0f4f7; /* Um azul/cinza bem claro, como no Trello */
+  min-height: 100vh;
+  padding: 1.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow-x: hidden; /* Previne scroll horizontal da página inteira */
+}
+
+/* 2. Header da Página (Título + Botão Adicionar) */
+.page-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a2a44; /* Azul escuro da sua paleta */
+}
+
+.btn-add-course {
+  background-color: #FD7E14;
+  border-color: #FD7E14;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-add-course:hover {
+  background-color: #e67012;
+  border-color: #e67012;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
+}
+
+/* 3. Wrapper do Quadro Kanban
+   - Chave para o layout: display: flex e overflow-x: auto
+   - Isso faz as colunas ficarem lado-a-lado e permite scroll horizontal.
+*/
+.kanban-board-wrapper {
+  display: flex;
+  flex-wrap: nowrap; /* Garante que as colunas não quebrem a linha */
+  overflow-x: auto;  /* Permite scroll horizontal das colunas */
+  gap: 1.5rem; /* Espaço entre as colunas */
+  padding-bottom: 1.5rem;
+}
+
+/* 4. Coluna Kanban (TO DO, IN PROGRESS, COMPLETED) */
+.kanban-column {
+  min-width: 340px; /* Largura mínima de cada coluna */
+  width: 340px;     /* Largura fixa */
+  background-color: #f8f9fa; /* Fundo cinza claro da coluna */
+  border-radius: 12px;
+  padding: 1rem;
+  /* Sombra sutil para dar profundidade */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+}
+
+.column-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #495057; /* Texto da coluna (TO DO, etc) */
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+/* 5. Card do Curso (Minimalista) */
+.course-card {
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+  transition: all 0.2s ease-in-out;
+}
+
+.course-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.card-title-link {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #007bff; /* Azul para o link */
+  text-decoration: none;
+}
+.card-title-link:hover {
+  text-decoration: underline;
+}
+
+.card-institution {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.card-reason {
+  font-size: 0.95rem;
+  color: #343a40;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.card-footer {
+  background-color: #fff !important; /* Remove o fundo cinza do footer do Bootstrap */
+  border-top: 1px solid #f1f3f5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-hours-badge {
+  background-color: #4a6f98 !important; /* Azul médio da sua paleta */
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Estilo para o menu Dropdown de mover */
+.card-move-menu .dropdown-toggle::after {
+  display: none; /* Remove a seta padrão */
+}
+.card-move-menu .dropdown-toggle {
+  background: none !important;
+  border: none !important;
+  color: #6c757d;
+  font-size: 1.25rem;
+  padding: 0 0.5rem;
+}
+.card-move-menu .dropdown-toggle:hover {
+  color: #343a40;
+}
+
+/* Modal Form */
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+  color: #1a2a44;
+  font-weight: 600;
+}

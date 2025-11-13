@@ -1,0 +1,130 @@
+/* src/pages/Dashboard.css */
+
+/* 1. Configurações Globais da Página */
+.dashboard-page {
+  background-color: #f8f9fa; /* Fundo cinza bem claro, como na imagem */
+  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow-x: hidden; /* Previne scroll horizontal */
+  min-height: 100vh; /* Garante que ocupe a tela toda */
+}
+
+/* 2. Seção do Header (Topo com Gradiente) */
+.header-section {
+  /* Gradiente da sua paleta */
+  background: linear-gradient(105deg, 
+    hsla(27, 98%, 68%, 0.8), 
+    hsla(40, 96%, 68%, 0.8) 30%, 
+    hsla(190, 80%, 80%, 0.6) 100%
+  );
+  padding: 3rem 1.5rem 2rem 1.5rem;
+}
+
+/* 2.2 Título e Subtítulo */
+.header-title {
+  font-size: 2.25rem; /* Título grande */
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+  text-align: center; /* Centralizado como no seu original */
+}
+
+.header-subtitle {
+  font-size: 1.15rem; /* Subtítulo */
+  color: #444;
+  line-height: 1.6;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* 3. Estilos das Seções de Conteúdo */
+.content-section {
+  padding: 2.5rem 1.5rem;
+  border-bottom: 1px solid #e9ecef; /* Linha divisória sutil */
+}
+
+/* "01", "02", "03"... */
+.section-number {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #FD7E14; /* Laranja da sua marca */
+  margin-bottom: 0.25rem;
+}
+
+/* "Aprendizado Constante", "Localização"... */
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 1rem;
+}
+
+.section-text {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* 4. Estilização para seus Cards Importados */
+/* Removemos as bordas e sombras padrão do Bootstrap */
+.content-section .card {
+  border: none !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 12px !important;
+  margin-bottom: 1.5rem; /* Espaçamento entre os cards */
+}
+
+/* 5. Seção do Co-Piloto (IA) */
+.copilot-section {
+  background-color: #f1f3f5; /* Fundo cinza claro */
+  padding: 2.5rem 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* Estiliza o card do Co-Piloto especificamente */
+.copilot-card {
+  background-color: #ffffff !important;
+  border: 1px solid #dee2e6 !important;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.copilot-card .card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #FD7E14; /* Laranja */
+}
+
+.copilot-card .card-text {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.copilot-card .btn-primary {
+  background-color: #FD7E14;
+  border-color: #FD7E14;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem; /* Botão arredondado */
+  transition: all 0.3s ease;
+}
+
+.copilot-card .btn-primary:hover {
+  background-color: #e67012;
+  border-color: #e67012;
+  transform: translateY(-2px);
+}
+
+/* 6. Footer */
+.dashboard-footer {
+  padding: 2.5rem 1.5rem;
+  background-color: #ffffff;
+}
+
+.footer-logo {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a2a44; /* Cor escura do logo "Redo" */
+}

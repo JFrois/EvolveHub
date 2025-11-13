@@ -3,11 +3,6 @@ import React from 'react';
 import { Card, ProgressBar, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom'; // Para criar o link do botão
 
-/**
- * Este componente exibe o skill atual em foco.
- * Vamos usar "props" (propriedades) para torná-lo reutilizável.
- * Se não passarmos nada, ele usa os valores "defaultProps".
- */
 function CardSkill({ skillName, progress, trilhaLink }) {
     return (
         <Card className="mb-4">
@@ -21,7 +16,7 @@ function CardSkill({ skillName, progress, trilhaLink }) {
                 <ProgressBar
                     now={progress}
                     label={`${progress}%`}
-                    variant="primary" // Podes mudar para "warning" (laranja) se preferires
+                    variant="primary" //  mudar para "warning" (laranja) 
                     animated // Efeito animado!
                     className="mb-3"
                 />
