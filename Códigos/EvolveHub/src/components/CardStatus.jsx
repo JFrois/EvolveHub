@@ -15,8 +15,8 @@ export default function CardStatus() {
       <Card.Body>
         <h5>Status do Dia</h5>
         <ListGroup variant="flush">
-          {stats.map((s, idx) => (
-            <ListGroup.Item key={idx} className="d-flex justify-content-between align-items-center">
+          {stats.map((s) => (
+            <ListGroup.Item key={s.label} className="d-flex justify-content-between align-items-center">
               <span>{s.label}</span>
               <strong>{s.value}</strong>
             </ListGroup.Item>

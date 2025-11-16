@@ -1,73 +1,38 @@
-import { GoogleGenAI } from "@google/genai";
-
-const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
-
-const ai = new GoogleGenAI({
-    apiKey: GEMINI_API_KEY
-});
-
-const SYSTEM_INSTRUCTION = `Você é uma IA de auxílio de uma plataforma de desenvolvimento pessoal
-focado em organizar e melhorar a produtividade do usuário.
-Responda de forma gentil e positiva.
-
-UTILIZE APENAS '-' PARA SINTETIZAR EM TÓPICOS CASO NECESSÁRIO E NADA MAIS DE MARKDOWN, RESPONDA EM PORTUGUES (PT-BR).
-`;
-
-const chat = ai.chats.create({
-    model: "gemini-2.5-flash", 
-    config: {
-        systemInstruction: SYSTEM_INSTRUCTION, // Usa as regras como instrução do sistema
-    }
-});
-
-// Cada usuário teria seus dados do site aqui para tratamento personalizado.
-const dadosParaIA = {
- "user_profile": {
-   "nickname": "Alexa",
-   "gender": "Female",
-   "country": "Brazil",
-   "language": "Portuguese (BR)",
-   "time_zone": "GMT-03:00 Brasilia"
- },
- "user_skills_progress": [
-   { "skill_name": "Introdução ao Design Thinking", "details": "Fundamentos e processos.", "status": "Completo" },
-   { "skill_name": "Fundamentos de UX", "details": "Pesquisa e prototipagem.", "status": "Completo" },
-   { "skill_name": "React Básico", "details": "Componentes, props, state.", "status": "Em Progresso" },
-   { "skill_name": "React Avançado", "details": "Hooks, performance.", "status": "Em Progresso" },
-   { "skill_name": "IA para Profissionais", "details": "Introdução ao uso de APIs de IA.", "status": "Em Progresso" }
- ]
-};
-const jsonString = JSON.stringify(dadosParaIA, null, 2);
-
-const CONTEXTO_FIXO = `
----
-Detalhes do usuário (JSON):
-\`\`\`json
-${jsonString}
-\`\`\`
-`;
-
+/**
+ * Envia um prompt para o *nosso* backend (Vercel Function),
+ * que então chama o Gemini com segurança.
+ */
 export async function gerarRespostaIA(prompt) {
-    if (!prompt) {
-        throw new Error("O prompt não pode ser vazio.");
+  if (!prompt) {
+    throw new Error("O prompt não pode ser vazio.");
+  }
+
+  try {
+    // 1. Chama a sua própria API (criada no Passo 1)
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // 2. Envia apenas o prompt no corpo da requisição
+      body: JSON.stringify({ prompt: prompt }),
+    });
+
+    // 3. Trata erros da sua própria API
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Falha ao receber dados da IA.');
     }
 
-    const prompt_com_contexto = `${CONTEXTO_FIXO}
----
-PERGUNTA DO USUÁRIO: ${prompt}
-`;
-    const response = await chat.sendMessage({
-        message: prompt_com_contexto,
-    });
-    
-    return response.text;
+    // 4. Recebe a resposta e retorna o texto
+    const data = await response.json();
+    return data.text;
+
+  } catch (err) {
+    console.error("Erro ao chamar /api/chat:", err);
+    throw new Error("Não foi possível conectar ao assistente de IA.");
+  }
 }
 
-export function resetChatSession() {
-    return ai.chats.create({
-        model: "gemini-2.5-flash", 
-        config: {
-            systemInstruction: SYSTEM_INSTRUCTION,
-        }
-    });
-}
+// A função 'resetChatSession' não é mais necessária aqui,
+// pois cada chamada ao backend cria uma nova sessão.

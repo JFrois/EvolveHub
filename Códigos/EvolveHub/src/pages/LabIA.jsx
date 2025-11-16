@@ -80,8 +80,8 @@ function LabIA() {
                     <div className="suggestions-section">
                         <p className="suggestions-text">Sugestões sobre o que perguntar à sua IA:</p>
                         <Row className="g-3">
-                            {suggestions.map((sug, index) => (
-                                <Col xs={12} md={4} key={index}>
+                            {suggestions.map((sug) => (
+                                <Col xs={12} md={4} key={sug}>
                                     <div 
                                         className="suggestion-card" 
                                         onClick={() => handleSuggestionClick(sug)}
