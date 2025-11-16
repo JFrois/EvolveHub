@@ -1,44 +1,35 @@
 // src/components/CardSkill.jsx
-import React from 'react';
-import { Card, ProgressBar, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom'; // Para criar o link do botão
+import React, { useEffect, useState } from 'react';
+import { Card, ListGroup, Badge } from 'react-bootstrap';
 
-function CardSkill({ skillName, progress, trilhaLink }) {
-    return (
-        <Card className="mb-4">
-            <Card.Body>
-                <Card.Title className="h5">A tua próxima skill</Card.Title>
-                <Card.Text className="text-muted">
-                    Foco na tua trilha de <span style={{ color: '#FD7E14', fontWeight: 'bold' }}>{skillName}</span>.
-                </Card.Text>
+export default function CardSkill() {
+  const [skills, setSkills] = useState([]);
 
-                {/* Barra de Progresso do Bootstrap */}
-                <ProgressBar
-                    now={progress}
-                    label={`${progress}%`}
-                    variant="primary" //  mudar para "warning" (laranja) 
-                    animated // Efeito animado!
-                    className="mb-3"
-                />
+  useEffect(() => {
+    fetch('/trilha.json')
+      .then(res => res.json())
+      .then(data => setSkills(data.trilha || []))
+      .catch(err => console.error('Erro ao carregar skills', err));
+  }, []);
 
-                <Button
-                    variant="outline-primary" // Botão com estilo "outline"
-                    as={Link} // Funciona como um Link do React Router
-                    to={trilhaLink} // O destino do link
-                    className="w-100" // Ocupa 100% da largura do Card
-                >
-                    Ver Trilha Completa ➔
-                </Button>
-            </Card.Body>
-        </Card>
-    );
+  return (
+    <Card className="mt-3 shadow-sm">
+      <Card.Body>
+        <h5>Minhas Skills</h5>
+        <ListGroup variant="flush">
+          {skills.map(skill => (
+            <ListGroup.Item key={skill.id} className="d-flex justify-content-between align-items-center">
+              <div>
+                <div style={{ fontWeight: 600 }}>{skill.nome}</div>
+                <small className="text-muted">{skill.descricao}</small>
+              </div>
+              <div>
+                {skill.completo ? <Badge bg="success">Completo</Badge> : <Badge bg="secondary">Em Progresso</Badge>}
+              </div>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      </Card.Body>
+    </Card>
+  );
 }
-
-// Valores padrão caso nenhuma "prop" seja passada
-CardSkill.defaultProps = {
-    skillName: 'Lógica Python',
-    progress: 75,
-    trilhaLink: '/trilha' // O link para a Página 2
-};
-
-export default CardSkill;
