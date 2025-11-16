@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Spinner, Alert, Card } from 'react-bootstrap';
 import { SendFill } from 'react-bootstrap-icons'; // Importa o ícone de avião
 import './LabIA.css';
+import { gerarRespostaIA } from '../services/api';
 
 function LabIA() {
     const [prompt, setPrompt] = useState('');
@@ -10,7 +11,6 @@ function LabIA() {
     const [isLoading, setIsLoading] = useState(false);
     const [erro, setErro] = useState(null);
 
-    // Sugestões de perguntas como na Image 1
     const suggestions = [
         "O que posso te pedir para fazer?",
         "Qual dos meus projetos está com melhor desempenho?",
@@ -19,20 +19,19 @@ function LabIA() {
 
     const handleEnviarPrompt = async (e) => {
         e.preventDefault();
-        if (!prompt.trim()) return; // Não envia prompt vazio
+        if (!prompt.trim()) return;
 
         setIsLoading(true);
         setErro(null);
         setRespostaIA('');
         
-        console.log("Enviando prompt (simulado):", prompt);
+        console.log("Enviando prompt:", prompt);
 
         try {
             await new Promise(resolve => setTimeout(resolve, 2000)); 
 
-            const respostaSimulada = `Olá! Simulei a tua tarefa com o prompt:\n\n"${prompt}"\n\nNo futuro, a IA irá gerar um resultado real aqui. Por exemplo:\n\n\`\`\`python\n# Código Python sugerido pela IA\ndef soma(a, b):\nreturn a + b\n\nprint(soma(5, 3)) # Output: 8\n\`\`\`\n\nEstou pronto para te ajudar a otimizar as tuas tarefas!`;
-            
-            setRespostaIA(respostaSimulada);
+            const resposta = await gerarRespostaIA(prompt)
+            setRespostaIA(resposta);
 
         } catch (err) {
             console.error("Erro ao comunicar com a IA (simulado):", err);
