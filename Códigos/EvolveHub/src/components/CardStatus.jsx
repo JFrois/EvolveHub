@@ -1,56 +1,28 @@
 // src/components/CardStatus.jsx
-import React, { useState } from 'react';
-import { Card, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import React from 'react';
+import { Card, ListGroup } from 'react-bootstrap';
 
-function CardStatus() {
-    // O useState vai guardar o valor 'home' ou 'escritorio'
-    // Começa com 'home' como padrão
-    const [local, setLocal] = useState('home');
+export default function CardStatus() {
+  // Exemplo estático; se tiver dados dinâmicos, adaptação é fácil
+  const stats = [
+    { label: 'Tarefas Hoje', value: 4 },
+    { label: 'Horas Focadas', value: '3h 20m' },
+    { label: 'Reuniões', value: 2 }
+  ];
 
-    const handleChange = (val) => {
-        setLocal(val);
-        // No futuro, aqui poderias chamar uma API para salvar esta preferência
-    };
-
-    return (
-        <Card className="mb-4">
-            <Card.Body>
-                <Card.Title className="h5">O teu local de trabalho</Card.Title>
-                <Card.Text className="text-muted">
-                    Seleciona o teu status para a equipa.
-                </Card.Text>
-
-                {/* ToggleButtonGroup gere o estado de qual botão está ativo.
-          'type="radio"' garante que apenas um pode ser selecionado.
-          'name="local-trabalho"' é importante para a acessibilidade.
-        */}
-                <ToggleButtonGroup
-                    type="radio"
-                    name="local-trabalho"
-                    value={local}
-                    onChange={handleChange}
-                    className="d-flex" // Faz os botões ocuparem o espaço todo
-                >
-                    <ToggleButton
-                        id="tbg-radio-1"
-                        value={'home'}
-                        // Usa 'primary' (azul) quando ativo, e 'outline-secondary' (cinza) quando inativo
-                        variant={local === 'home' ? 'primary' : 'outline-secondary'}
-                    >
-                        🏠 Home
-                    </ToggleButton>
-
-                    <ToggleButton
-                        id="tbg-radio-2"
-                        value={'escritorio'}
-                        variant={local === 'escritorio' ? 'primary' : 'outline-secondary'}
-                    >
-                        🏢 Escritório
-                    </ToggleButton>
-                </ToggleButtonGroup>
-            </Card.Body>
-        </Card>
-    );
+  return (
+    <Card className="shadow-sm p-3">
+      <Card.Body>
+        <h5>Status do Dia</h5>
+        <ListGroup variant="flush">
+          {stats.map((s, idx) => (
+            <ListGroup.Item key={idx} className="d-flex justify-content-between align-items-center">
+              <span>{s.label}</span>
+              <strong>{s.value}</strong>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      </Card.Body>
+    </Card>
+  );
 }
-
-export default CardStatus;
