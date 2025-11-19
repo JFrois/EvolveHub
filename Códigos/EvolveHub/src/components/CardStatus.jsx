@@ -1,6 +1,6 @@
 // src/components/CardStatus.jsx
-import React from 'react';
-import { Card, ListGroup } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Card, ListGroup, Form, Button } from 'react-bootstrap';
 
 export default function CardStatus() {
   // Exemplo estático; se tiver dados dinâmicos, adaptação é fácil
@@ -9,6 +9,27 @@ export default function CardStatus() {
     { label: 'Horas Focadas', value: '3h 20m' },
     { label: 'Reuniões', value: 2 }
   ];
+
+  // Estado para armazenar os status selecionados
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+
+  // Status possíveis para o colaborador
+  const availableStatuses = ['Feliz', 'Estressado', 'Triste', 'Motivado'];
+
+  // Função para manipular a seleção de status
+  const handleStatusChange = (event) => {
+    const { value, checked } = event.target;
+
+    setSelectedStatuses(prevStatuses =>
+      checked ? [...prevStatuses, value] : prevStatuses.filter(status => status !== value)
+    );
+  };
+
+  // Função para enviar status ao backend
+  const handleSubmitStatus = () => {
+    console.log("Status selecionados:", selectedStatuses);
+    // Aqui você pode adicionar a lógica para enviar os status para o backend
+  };
 
   return (
     <Card className="shadow-sm p-3">
@@ -22,6 +43,26 @@ export default function CardStatus() {
             </ListGroup.Item>
           ))}
         </ListGroup>
+
+        {/* Seção de Seleção de Status */}
+        <div className="mt-4">
+          <h6>Selecione seu Status:</h6>
+          <Form>
+            {availableStatuses.map((status) => (
+              <Form.Check
+                key={status}
+                type="checkbox"
+                label={status}
+                value={status}
+                checked={selectedStatuses.includes(status)}
+                onChange={handleStatusChange}
+              />
+            ))}
+          </Form>
+          <Button variant="primary" className="mt-3" onClick={handleSubmitStatus}>
+            Atualizar Status
+          </Button>
+        </div>
       </Card.Body>
     </Card>
   );
