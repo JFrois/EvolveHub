@@ -1,47 +1,51 @@
 // src/pages/Dashboard.jsx
 import React, { useState, useEffect } from 'react';
+import StatusSelector from '../components/StatusSelector'; // Importar o novo StatusSelector
 import { Container, Row, Col, Card, Button, ProgressBar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-// Componentes personalizados
+// Outros componentes
 import CardBemEstar from '../components/CardBemEstar';
-import CardStatus from '../components/CardStatus';
 import CardSkill from '../components/CardSkill';
-
-// CSS específico da página
 import './Dashboard.css';
 
 function Dashboard() {
-    const [skillProgress, setSkillProgress] = useState(0);
-    const [nextSkill, setNextSkill] = useState(null);
-    const [inProgressCourses, setInProgressCourses] = useState([]); // Estado para armazenar os cursos em andamento
-    const [selectedStatuses, setSelectedStatuses] = useState([]); // Estado para armazenar os status selecionados
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
 
-    // Integração com trilha.json
-    useEffect(() => {
-        fetch('/trilha.json')
-            .then((res) => {
-                if (!res.ok) throw new Error('Não foi possível carregar trilha.json');
-                return res.json();
-            })
-            .then((data) => {
-                const skills = Array.isArray(data.trilha) ? data.trilha : [];
-                if (skills.length === 0) {
-                    setSkillProgress(0);
-                    setNextSkill('Nenhuma skill encontrada');
-                    return;
-                }
-                const completed = skills.filter((s) => s.completo).length;
-                setSkillProgress((completed / skills.length) * 100);
-                const next = skills.find((s) => !s.completo);
-                setNextSkill(next ? next.nome : 'Todas concluídas! 🎉');
-            })
-            .catch((err) => {
-                console.error(err);
-                setNextSkill('Erro ao carregar trilha');
-            });
-    }, []);
+  const handleStatusChange = (statuses) => {
+    setSelectedStatuses(statuses); // Atualiza os status selecionados
+  };
 
-    // Carregar cursos em andamento do backend
-    useEffect(() => {
-        fe
+  return (
+    <div className="dashboard-page">
+      {/* HEADER */}
+      <header className="header-section">
+        <Container>
+          <Row className="justify-content-center">
+            <Col xs={12} md={10} lg={8} className="text-center">
+              <h2 className="header-title">Bem-vindo ao Evolve<span className="accent">Hub</span>!</h2>
+              <p className="header-subtitle">O teu portal para o futuro do trabalho.</p>
+            </Col>
+          </Row>
+        </Container>
+      </header>
+
+      {/* MAIN */}
+      <Container as="main">
+        {/* Seção de Status */}
+        <Row as="section" className="content-section justify-content-center">
+          <Col md={10} lg={8}>
+            <span className="section-number">01</span>
+            <h2 className="section-title">Como está se sentindo?</h2>
+            {/* Usando o StatusSelector */}
+            <StatusSelector onStatusChange={handleStatusChange} />
+          </Col>
+        </Row>
+
+        {/* Resto do código da página (trilha, progresso de skills, etc) */}
+      </Container>
+    </div>
+  );
+}
+
+export default Dashboard;

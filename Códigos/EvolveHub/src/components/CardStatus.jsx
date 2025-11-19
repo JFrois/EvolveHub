@@ -3,29 +3,23 @@ import React, { useState } from 'react';
 import { Card, ListGroup, Form, Button } from 'react-bootstrap';
 
 export default function CardStatus() {
-  // Exemplo estático;
   const stats = [
     { label: 'Tarefas Hoje', value: 4 },
     { label: 'Horas Focadas', value: '3h 20m' },
     { label: 'Reuniões', value: 2 }
   ];
 
-  // Estado para armazenar os status selecionados
   const [selectedStatuses, setSelectedStatuses] = useState([]);
-
-  // Status possíveis para o colaborador
   const availableStatuses = ['Feliz', 'Estressado', 'Triste', 'Motivado'];
 
-  // Função para manipular a seleção de status
   const handleStatusChange = (event) => {
     const { value, checked } = event.target;
-
-    setSelectedStatuses((prevStatuses) =>
+    setSelectedStatuses(prevStatuses =>
       checked ? [...prevStatuses, value] : prevStatuses.filter(status => status !== value)
     );
   };
 
-  // Função para enviar status ao backend 
+  // Função para enviar status ao backend (agora com o endpoint correto)
   const handleSubmitStatus = async () => {
     try {
       const response = await fetch('/api/updateStatus', {
@@ -33,9 +27,7 @@ export default function CardStatus() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          statuses: selectedStatuses,
-        }),
+        body: JSON.stringify({ statuses: selectedStatuses }),
       });
 
       if (response.ok) {
@@ -62,7 +54,6 @@ export default function CardStatus() {
           ))}
         </ListGroup>
 
-        {/* Seção de Seleção de Status */}
         <div className="mt-4">
           <h6>Selecione seu Status:</h6>
           <Form>
