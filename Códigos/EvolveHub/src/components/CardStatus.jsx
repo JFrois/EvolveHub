@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Card, ListGroup, Form, Button } from 'react-bootstrap';
 
 export default function CardStatus() {
-  // Exemplo estático; se tiver dados dinâmicos, adaptação é fácil
+  // Exemplo estático;
   const stats = [
     { label: 'Tarefas Hoje', value: 4 },
     { label: 'Horas Focadas', value: '3h 20m' },
@@ -20,15 +20,33 @@ export default function CardStatus() {
   const handleStatusChange = (event) => {
     const { value, checked } = event.target;
 
-    setSelectedStatuses(prevStatuses =>
+    setSelectedStatuses((prevStatuses) =>
       checked ? [...prevStatuses, value] : prevStatuses.filter(status => status !== value)
     );
   };
 
-  // Função para enviar status ao backend
-  const handleSubmitStatus = () => {
-    console.log("Status selecionados:", selectedStatuses);
-    // Aqui você pode adicionar a lógica para enviar os status para o backend
+  // Função para enviar status ao backend 
+  const handleSubmitStatus = async () => {
+    try {
+      const response = await fetch('/api/updateStatus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          statuses: selectedStatuses,
+        }),
+      });
+
+      if (response.ok) {
+        alert('Status atualizado com sucesso!');
+      } else {
+        alert('Erro ao atualizar status');
+      }
+    } catch (error) {
+      console.error('Erro de rede:', error);
+      alert('Erro ao tentar salvar o status');
+    }
   };
 
   return (
