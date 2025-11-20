@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 
 // Importar seu componente Navbar
-import AppNavbar from './components/Navbar'; // (ou Navbrar.jsx se você manteve o nome com erro de digitação)
+import AppNavbar from './components/Navbar';
 
 // Importar suas páginas
 import Dashboard from './pages/Dashboard';
@@ -14,7 +14,9 @@ import Trilha from './pages/Trilha';
 import LabIA from './pages/LabIA';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
-import Login from './pages/Login'; // Importar a página de Login
+import Login from './pages/Login';
+import CriarConta from './pages/CriarConta';
+import Ajuda from './pages/Ajuda';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,6 +32,7 @@ function App() {
   return (
     <BrowserRouter>
       
+      {/* Navbar aparece APENAS quando logado */}
       {isLoggedIn && <AppNavbar onLogout={handleLogout} />}
       
       <Routes>
@@ -40,6 +43,16 @@ function App() {
             isLoggedIn 
               ? <Navigate to="/dashboard" />
               : <Login onLoginSuccess={handleLogin} />
+          } 
+        />
+
+        {/* Rota de Criar Conta - CORRIGIDA */}
+        <Route 
+          path="/criar-conta" 
+          element={
+            isLoggedIn 
+              ? <Navigate to="/dashboard" />
+              : <CriarConta onLoginSuccess={handleLogin} /> // ← CORRIGIDO: handleLogin
           } 
         />
 
@@ -75,11 +88,6 @@ function App() {
           element={isLoggedIn ? <Admin /> : <Navigate to="/login" />} 
         />
         
-        {/* Rotas da sidebar do Perfil */}
-        <Route 
-          path="/ajuda" 
-          element={isLoggedIn ? <div>Página de Ajuda</div> : <Navigate to="/login" />} 
-        />
         <Route 
           path="/settings" 
           element={isLoggedIn ? <div>Página de Configurações</div> : <Navigate to="/login" />} 
@@ -87,6 +95,12 @@ function App() {
 
         {/* Rota "catch-all" */}
         <Route path="*" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />} />
+        
+        <Route 
+        path="/ajuda" 
+        element={isLoggedIn ? <Ajuda /> : <Navigate to="/login" />} 
+        />
+        
       </Routes>
       
     </BrowserRouter>

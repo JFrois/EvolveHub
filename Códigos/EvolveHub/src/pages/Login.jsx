@@ -78,9 +78,9 @@ function Login({ onLoginSuccess }) {
                     </Form>
 
                     <p className="login-secondary-link">
-                        Don't have an account? <Link to="/signup">Sign Up</Link>
+                        Don't have an account? <Link to="/criar-conta">Sign Up</Link>
                     </p>
-
+                    
                     <div className="login-divider">- OR -</div>
 
                     <Button className="btn-social-login">
