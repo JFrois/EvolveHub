@@ -11,9 +11,11 @@ export default function LabIAWidget() {
         <Card.Text>
           Experimentos e ferramentas de IA. Clique abaixo para acessar o LabIA.
         </Card.Text>
-        <Link to="/labia">
+
+        <Link to="/lab-ia">
           <Button variant="primary">Ir para o LabIA</Button>
         </Link>
+
       </Card.Body>
     </Card>
   );
