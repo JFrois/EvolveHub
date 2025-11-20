@@ -1,15 +1,18 @@
-// src/pages/LabIA.jsx
-import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button, Spinner, Alert, Card } from 'react-bootstrap';
-import { SendFill } from 'react-bootstrap-icons'; // Importa o ícone de avião
+import React, { useState, useRef, useEffect } from 'react';
+import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import { SendFill, PersonFill, Robot } from 'react-bootstrap-icons'; 
 import './LabIA.css';
 import { gerarRespostaIA } from '../services/api';
 
 function LabIA() {
     const [prompt, setPrompt] = useState('');
-    const [respostaIA, setRespostaIA] = useState('');
+    // Array para guardar o histórico da conversa
+    const [messages, setMessages] = useState([]); 
     const [isLoading, setIsLoading] = useState(false);
     const [erro, setErro] = useState(null);
+
+    // Ref para rolar o chat para baixo automaticamente
+    const messagesEndRef = useRef(null);
 
     const suggestions = [
         "O que posso te pedir para fazer?",
@@ -17,105 +20,152 @@ function LabIA() {
         "Que projetos devo me preocupar agora?"
     ];
 
+    // Função para rolar para o final do chat sempre que houver nova mensagem
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, isLoading]);
+
     const handleEnviarPrompt = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (!prompt.trim()) return;
 
+        const textoPergunta = prompt; // Guarda o texto antes de limpar
+
+        // Limpa o campo IMEDIATAMENTE e adiciona msg do usuário
+        setPrompt(''); 
+        setMessages(prev => [...prev, { text: textoPergunta, sender: 'user' }]);
+        
         setIsLoading(true);
         setErro(null);
-        setRespostaIA('');
         
-        console.log("Enviando prompt:", prompt);
+        console.log("Enviando prompt:", textoPergunta);
 
         try {
-            await new Promise(resolve => setTimeout(resolve, 2000)); 
+            // Simulação de delay (mantenha ou remova conforme sua API real)
+            await new Promise(resolve => setTimeout(resolve, 1000)); 
 
-            const resposta = await gerarRespostaIA(prompt)
-            setRespostaIA(resposta);
+            const resposta = await gerarRespostaIA(textoPergunta);
+            
+            // Adiciona a resposta da IA ao histórico
+            setMessages(prev => [...prev, { text: resposta, sender: 'ai' }]);
 
         } catch (err) {
-            console.error("Erro ao comunicar com a IA (simulado):", err);
-            setErro("Não foi possível conectar com o Co-Piloto Evolve. Tenta novamente mais tarde.");
+            console.error("Erro ao comunicar com a IA:", err);
+            setErro("Não foi possível conectar com o Co-Piloto Evolve.");
         } finally {
             setIsLoading(false);
         }
     };
 
     const handleSuggestionClick = (suggestion) => {
+        // Ao clicar na sugestão, já define o texto e envia ou prepara
         setPrompt(suggestion);
-        // Opcional: envia a sugestão automaticamente
-        // handleEnviarPrompt({ preventDefault: () => {} }); 
+        // Se quiser enviar direto ao clicar, descomente a linha abaixo:
+        // handleEnviarPrompt({ preventDefault: () => {} }, suggestion);
     };
 
     return (
         <div className="lab-ia-page">
-            <Container className="content-wrapper"> 
-                {/* Logo/Ícone Centralizado */}
-                <div className="lab-ia-logo">
-                    <span>✨</span>
-                </div>
-
-                {/* Título Principal */}
-                <h2 className="lab-ia-title">
-                    Pergunte qualquer coisa à sua IA
-                </h2>
-
-                <div className="w-100 mb-5">
-                    {erro && <Alert variant="danger" className="text-center">{erro}</Alert>}
-                    {isLoading ? (
-                        <div className="text-center py-5">
-                            <Spinner animation="border" role="status" className="spinner-brand-primary" />
-                            <p className="mt-2 loading-text">A gerar a resposta...</p>
-                        </div>
-                    ) : (
-                        respostaIA && (
-                            <div className="resposta-ia-box">
-                                {respostaIA}
-                            </div>
-                        )
-                    )}
-                </div>
-
-                {!respostaIA && !isLoading && (
-                    <div className="suggestions-section">
-                        <p className="suggestions-text">Sugestões sobre o que perguntar à sua IA:</p>
-                        <Row className="g-3">
-                            {suggestions.map((sug) => (
-                                <Col xs={12} md={4} key={sug}>
-                                    <div 
-                                        className="suggestion-card" 
-                                        onClick={() => handleSuggestionClick(sug)}
-                                    >
-                                        {sug}
-                                    </div>
-                                </Col>
-                            ))}
-                        </Row>
-                    </div>
-                )}
+            <Container className="content-wrapper d-flex flex-column" style={{ height: '100vh' }}> 
                 
-                {/* Campo de Input Principal e Botão de Envio */}
-                <div className="w-100 d-flex align-items-center mt-auto p-3"> {/* mt-auto para empurrar para baixo */}
-                    <Form onSubmit={handleEnviarPrompt} className="d-flex flex-grow-1">
+                {/* Cabeçalho Fixo */}
+                <div className="text-center pt-4 pb-2">
+                    <div className="lab-ia-logo mb-2">
+                        <span>✨</span>
+                    </div>
+                    <h2 className="lab-ia-title">Pergunte ao Co-Piloto</h2>
+                </div>
+
+                {/* Área de Chat (Scrollável) */}
+                <div className="chat-area flex-grow-1 overflow-auto mb-3 px-3">
+                    
+                    {/* Mostra sugestões apenas se não houver mensagens ainda */}
+                    {messages.length === 0 && (
+                        <div className="suggestions-section mt-5">
+                            <p className="suggestions-text text-center">Sugestões para começar:</p>
+                            <Row className="g-3 justify-content-center">
+                                {suggestions.map((sug) => (
+                                    <Col xs={12} md={4} key={sug}>
+                                        <div 
+                                            className="suggestion-card" 
+                                            onClick={() => handleSuggestionClick(sug)}
+                                        >
+                                            {sug}
+                                        </div>
+                                    </Col>
+                                ))}
+                            </Row>
+                        </div>
+                    )}
+
+                    {/* Loop de Mensagens */}
+                    {messages.map((msg, index) => (
+                        <div 
+                            key={index} 
+                            className={`message-row d-flex ${msg.sender === 'user' ? 'justify-content-end' : 'justify-content-start'} mb-3`}
+                        >
+                            <div className={`message-bubble ${msg.sender === 'user' ? 'user-bubble' : 'ai-bubble'}`}>
+                                {msg.sender === 'ai' && <Robot className="message-icon me-2" />}
+                                {msg.sender === 'user' && <PersonFill className="message-icon ms-2 order-2" />}
+                                <span className={msg.sender === 'user' ? 'order-1' : ''}>{msg.text}</span>
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* Loading Indicator (Animação de bolinhas) */}
+                    {isLoading && (
+                        <div className="message-row d-flex justify-content-start mb-3">
+                            <div className="ai-bubble message-bubble d-flex align-items-center">
+                                <Robot className="message-icon me-2" />
+                                <div className="typing-indicator">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    
+                    {erro && <Alert variant="danger">{erro}</Alert>}
+                    
+                    {/* Elemento invisível para ancorar o scroll */}
+                    <div ref={messagesEndRef} />
+                </div>
+
+                {/* Input Fixo no Rodapé */}
+                <div className="input-area p-3 bg-white border-top">
+                    <Form onSubmit={handleEnviarPrompt} className="d-flex align-items-center">
                         <Form.Control
                             as="textarea"
-                            rows={1} // Começa com 1 linha e expande
-                            className="main-chat-input"
+                            rows={1}
+                            className="main-chat-input me-2"
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
-                            placeholder="Pergunte algo sobre seus projetos..."
+                            placeholder="Digite sua pergunta..."
                             disabled={isLoading}
-                            style={{ resize: 'none', maxHeight: '150px' }} // Desabilita resize manual, limita altura
+                            style={{ resize: 'none', borderRadius: '20px' }}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleEnviarPrompt(e);
+                                }
+                            }}
                         />
                         <Button 
                             type="submit" 
                             disabled={isLoading || !prompt.trim()} 
-                            className="send-button"
+                            className="send-button rounded-circle p-2"
+                            style={{ width: '45px', height: '45px' }}
                         >
                             <SendFill />
                         </Button>
                     </Form>
                 </div>
+
             </Container>
         </div>
     );
