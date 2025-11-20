@@ -4,7 +4,6 @@ import { Modal, Button } from 'react-bootstrap';
 
 const options = [
   { key: 'onsite', label: 'Presencial' },
-  { key: 'hybrid', label: 'Híbrido' },
   { key: 'home', label: 'Home office' },
 ];
 
