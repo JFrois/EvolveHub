@@ -1,6 +1,6 @@
 // src/pages/Dashboard.jsx
 import React, { useState, useEffect } from 'react';
-import StatusSelector from '../components/StatusSelector'; // Mantive seu import
+import StatusSelector from '../components/StatusSelector';
 import { Container, Row, Col, Card, Button, ProgressBar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ import CardBemEstar from '../components/CardBemEstar';
 import CardSkill from '../components/CardSkill';
 import './Dashboard.css';
 
-// Novos componentes (adicione estes arquivos em src/components)
+// Novos componentes 
 import MoodPopup from '../components/MoodPopup';
 import WorkMoodPopup from '../components/WorkMoodPopup';
 import WorkModePopup from '../components/WorkModePopup';
@@ -93,15 +93,6 @@ function Dashboard() {
 
       {/* MAIN */}
       <Container as="main">
-        {/* Seção de Status */}
-        <Row as="section" className="content-section justify-content-center">
-          <Col md={10} lg={8}>
-            <span className="section-number">01</span>
-            <h2 className="section-title">Como está se sentindo?</h2>
-            {/* Usando o StatusSelector */}
-            <StatusSelector onStatusChange={handleStatusChange} />
-          </Col>
-        </Row>
 
         {/* Widget LabIA e Gráfico de Cursos */}
         <Row className="mt-4">
