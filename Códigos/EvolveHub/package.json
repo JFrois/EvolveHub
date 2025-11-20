@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "^1.29.1",
+    "@google/generative-ai": "^0.24.1",
     "analysis": "^0.4.2",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
