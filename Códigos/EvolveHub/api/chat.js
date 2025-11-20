@@ -2,8 +2,14 @@ import fs from "fs";
 import path from "path";
 import { criarCliente, resumirConversa, gerarResposta } from "../helper/ai.js";
 
-const historyPath = path.join(process.cwd(), "data", "history.json");
-const summaryPath = path.join(process.cwd(), "data", "summary.txt");
+// ===========================================================
+// AJUSTE PARA VERCEL: Usar pasta /tmp em produção
+// ===========================================================
+const isProduction = process.env.NODE_ENV === 'production';
+const baseDir = isProduction ? '/tmp' : path.join(process.cwd(), 'data');
+
+const historyPath = path.join(baseDir, "history.json");
+const summaryPath = path.join(baseDir, "summary.txt");
 
 const SYSTEM_INSTRUCTION = `
 Você é uma IA de auxílio de uma plataforma de desenvolvimento pessoal
@@ -23,9 +29,13 @@ function carregarHistorico() {
 }
 
 function salvarHistorico(hist) {
-  const dir = path.dirname(historyPath);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(historyPath, JSON.stringify(hist, null, 2), "utf8");
+  try {
+    // Garante que o diretório existe (seja /tmp ou /data)
+    if (!fs.existsSync(baseDir)) fs.mkdirSync(baseDir, { recursive: true });
+    fs.writeFileSync(historyPath, JSON.stringify(hist, null, 2), "utf8");
+  } catch (err) {
+    console.error("Aviso: Não foi possível salvar o histórico.", err);
+  }
 }
 
 function carregarResumo() {
@@ -38,18 +48,22 @@ function carregarResumo() {
 }
 
 function salvarResumo(texto) {
-  const dir = path.dirname(summaryPath);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(summaryPath, texto, "utf8");
+  try {
+    if (!fs.existsSync(baseDir)) fs.mkdirSync(baseDir, { recursive: true });
+    fs.writeFileSync(summaryPath, texto, "utf8");
+  } catch (err) {
+    console.error("Aviso: Não foi possível salvar o resumo.", err);
+  }
 }
 
 export default async function handler(request, response) {
+  // CORS e Verificação de Método
   if (request.method !== "POST") {
     return response.status(405).json({ error: "Method Not Allowed" });
   }
 
   if (!process.env.GEMINI_API_KEY) {
-    return response.status(500).json({ error: "Configuração faltando no servidor" });
+    return response.status(500).json({ error: "Configuração de API Key ausente no servidor" });
   }
 
   try {
@@ -58,6 +72,7 @@ export default async function handler(request, response) {
 
     const ai = await criarCliente();
 
+    // Carrega memória (Do disco local ou do /tmp na Vercel)
     let historico = carregarHistorico();
     let resumo = carregarResumo();
 
@@ -69,6 +84,7 @@ export default async function handler(request, response) {
       ]
     };
 
+    // Pega as últimas mensagens
     const memoriaCurtoPrazo = historico.slice(-6)
       .map(msg => `${msg.role.toUpperCase()}: ${msg.content}`)
       .join("\n");
@@ -89,15 +105,24 @@ PERGUNTA ATUAL DO USUÁRIO:
 ${prompt}
 `;
 
+    // Gera a resposta
     const resposta = await gerarResposta(ai, historico, promptCompleto);
 
+    // Atualiza memória
     historico.push({ role: "user", content: prompt });
     historico.push({ role: "assistant", content: resposta });
 
+    // Resumo automático
     if (historico.length > 12) {
-      const novoResumo = await resumirConversa(ai, historico);
-      salvarResumo(novoResumo);
-      historico = historico.slice(-6);
+      // Faz o resumo em background para não travar a resposta
+      // (Na Vercel Serverless isso pode ser cortado, mas tentamos)
+      try {
+        const novoResumo = await resumirConversa(ai, historico);
+        salvarResumo(novoResumo);
+        historico = historico.slice(-6);
+      } catch (e) {
+        console.log("Erro ao gerar resumo automático:", e);
+      }
     }
 
     salvarHistorico(historico);
@@ -106,6 +131,7 @@ ${prompt}
 
   } catch (err) {
     console.error("Erro na API /api/chat:", err);
-    return response.status(500).json({ error: "Falha ao comunicar com a IA." });
+    // Retorna 200 com mensagem de erro amigável para não quebrar o front
+    return response.status(500).json({ error: "Ocorreu um erro ao processar sua mensagem." });
   }
 }
