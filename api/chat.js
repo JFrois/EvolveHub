@@ -1,59 +1,43 @@
-import { criarCliente, resumirConversa, gerarResposta } from "./ai.js";
-
-// ===========================================================
-// CONFIGURAÇÃO DE ARMAZENAMENTO TEMPORÁRIO (Serverless)
-// ===========================================================
-// Na Vercel, não podemos escrever em pastas normais, apenas em /tmp
-const isProduction = process.env.NODE_ENV === 'production';
-// Se estiver em produção, NÃO TENTE ler arquivos, use memória volátil para evitar erros de 'fs'
-// (Para um chat simples, persistência em arquivo na Vercel não funciona bem sem banco de dados real)
+import { criarCliente, gerarResposta } from "./ai.js";
 
 export default async function handler(request, response) {
-  // 1. Validação de Método
-  if (request.method !== "POST") {
-    return response.status(405).json({ error: "Método não permitido (Use POST)" });
-  }
+  if (request.method !== "POST") return response.status(405).json({ error: "Method Not Allowed" });
 
-  // 2. Validação da Chave (DEBUG EXPLÍCITO)
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    console.error("ERRO CRÍTICO: GEMINI_API_KEY está undefined no servidor.");
-    return response.status(500).json({
-      error: "A chave de API (GEMINI_API_KEY) não foi configurada no painel da Vercel."
-    });
-  }
+  if (!apiKey) return response.status(500).json({ error: "Chave API não configurada na Vercel." });
 
   try {
     const { prompt } = request.body;
-    if (!prompt) return response.status(400).json({ error: "O prompt é obrigatório" });
-
-    // 3. Tenta conectar com a IA
+    const ai = await criarCliente();
+    
+    // Tenta gerar a resposta
     try {
-      const ai = await criarCliente();
+        // Chama a função do arquivo ai.js
+        const resposta = await gerarResposta(ai, [], prompt);
+        return response.status(200).json({ text: resposta });
 
-      // Define um histórico vazio para evitar erros de leitura de arquivo na Vercel
-      // (Melhoria futura: usar um Banco de Dados real como MongoDB/Postgres)
-      const historico = [];
-
-      const systemInstruction = `
-        Você é uma IA de auxílio de uma plataforma de desenvolvimento pessoal chamada EvolveHub.
-        Responda de forma objetiva, gentil e positiva em Português (PT-BR).
-        O usuário perguntou: ${prompt}
-      `;
-
-      const resposta = await gerarResposta(ai, historico, systemInstruction);
-
-      return response.status(200).json({ text: resposta });
-
-    } catch (aiError) {
-      console.error("Erro direto do Gemini:", aiError);
-      return response.status(500).json({
-        error: `Erro ao falar com o Google: ${aiError.message || 'Erro desconhecido'}`
-      });
+    } catch (modelError) {
+        console.error("Erro no modelo:", modelError);
+        
+        // SE DER ERRO, TENTA DESCOBRIR O MOTIVO
+        // Tenta listar os modelos disponíveis para essa chave
+        try {
+            // Correção para pegar o genAIInstance corretamente se ele for retornado direto ou encapsulado
+            const genAI = ai; 
+            // O método getGenerativeModel é do genAI, mas listModels não existe diretamente no SDK client
+            // Para debug, vamos devolver o erro cru do Google para você ver na tela
+            
+            throw new Error(`O Google rejeitou o modelo. Erro original: ${modelError.message}`);
+        } catch (listError) {
+             throw listError;
+        }
     }
 
   } catch (err) {
-    console.error("Erro Geral na API:", err);
-    return response.status(500).json({ error: `Erro interno no servidor: ${err.message}` });
+    console.error("Erro final:", err);
+    // Isso vai mostrar na tarja vermelha o motivo exato (ex: "API Not Enabled")
+    return response.status(500).json({ 
+        error: `DIAGNÓSTICO: ${err.message}` 
+    });
   }
 }
