@@ -1,113 +1,59 @@
-import fs from "fs";
-import path from "path";
-// Ajuste de importação: agora estão na mesma pasta
 import { criarCliente, resumirConversa, gerarResposta } from "./ai.js";
 
 // ===========================================================
-// AJUSTE PARA VERCEL: Usar pasta /tmp em produção
+// CONFIGURAÇÃO DE ARMAZENAMENTO TEMPORÁRIO (Serverless)
 // ===========================================================
+// Na Vercel, não podemos escrever em pastas normais, apenas em /tmp
 const isProduction = process.env.NODE_ENV === 'production';
-// Na Vercel Serverless, apenas /tmp é gravável
-const baseDir = isProduction ? '/tmp' : path.join(process.cwd(), 'data');
-
-const historyPath = path.join(baseDir, "history.json");
-const summaryPath = path.join(baseDir, "summary.txt");
-
-const SYSTEM_INSTRUCTION = `
-Você é uma IA de auxílio de uma plataforma de desenvolvimento pessoal.
-Responda de forma objetiva, gentil e positiva em Português (PT-BR).
-`;
-
-function carregarHistorico() {
-  try {
-    if (!fs.existsSync(historyPath)) return [];
-    return JSON.parse(fs.readFileSync(historyPath, "utf8"));
-  } catch {
-    return [];
-  }
-}
-
-function salvarHistorico(hist) {
-  try {
-    if (!fs.existsSync(baseDir)) fs.mkdirSync(baseDir, { recursive: true });
-    fs.writeFileSync(historyPath, JSON.stringify(hist, null, 2), "utf8");
-  } catch (err) {
-    console.error("Aviso: Não foi possível salvar o histórico.", err);
-  }
-}
-
-function carregarResumo() {
-  try {
-    if (!fs.existsSync(summaryPath)) return "";
-    return fs.readFileSync(summaryPath, "utf8");
-  } catch {
-    return "";
-  }
-}
-
-function salvarResumo(texto) {
-  try {
-    if (!fs.existsSync(baseDir)) fs.mkdirSync(baseDir, { recursive: true });
-    fs.writeFileSync(summaryPath, texto, "utf8");
-  } catch (err) {
-    console.error("Aviso: Não foi possível salvar o resumo.", err);
-  }
-}
+// Se estiver em produção, NÃO TENTE ler arquivos, use memória volátil para evitar erros de 'fs'
+// (Para um chat simples, persistência em arquivo na Vercel não funciona bem sem banco de dados real)
 
 export default async function handler(request, response) {
+  // 1. Validação de Método
   if (request.method !== "POST") {
-    return response.status(405).json({ error: "Method Not Allowed" });
+    return response.status(405).json({ error: "Método não permitido (Use POST)" });
   }
 
-  if (!process.env.GEMINI_API_KEY) {
-    return response.status(500).json({ error: "Configuração de API Key ausente" });
+  // 2. Validação da Chave (DEBUG EXPLÍCITO)
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    console.error("ERRO CRÍTICO: GEMINI_API_KEY está undefined no servidor.");
+    return response.status(500).json({
+      error: "A chave de API (GEMINI_API_KEY) não foi configurada no painel da Vercel."
+    });
   }
 
   try {
     const { prompt } = request.body;
     if (!prompt) return response.status(400).json({ error: "O prompt é obrigatório" });
 
-    const ai = await criarCliente();
+    // 3. Tenta conectar com a IA
+    try {
+      const ai = await criarCliente();
 
-    let historico = carregarHistorico();
-    let resumo = carregarResumo();
+      // Define um histórico vazio para evitar erros de leitura de arquivo na Vercel
+      // (Melhoria futura: usar um Banco de Dados real como MongoDB/Postgres)
+      const historico = [];
 
-    const dadosParaIA = {
-      user_profile: { nickname: "Usuário", country: "Brazil" }
-    };
+      const systemInstruction = `
+        Você é uma IA de auxílio de uma plataforma de desenvolvimento pessoal chamada EvolveHub.
+        Responda de forma objetiva, gentil e positiva em Português (PT-BR).
+        O usuário perguntou: ${prompt}
+      `;
 
-    const memoriaCurtoPrazo = historico.slice(-6)
-      .map(msg => `${msg.role.toUpperCase()}: ${msg.content}`)
-      .join("\n");
+      const resposta = await gerarResposta(ai, historico, systemInstruction);
 
-    const promptCompleto = `
-${SYSTEM_INSTRUCTION}
-DADOS: ${JSON.stringify(dadosParaIA)}
-RESUMO: ${resumo}
-HISTÓRICO: ${memoriaCurtoPrazo}
-USUÁRIO: ${prompt}
-`;
+      return response.status(200).json({ text: resposta });
 
-    const resposta = await gerarResposta(ai, historico, promptCompleto);
-
-    historico.push({ role: "user", content: prompt });
-    historico.push({ role: "assistant", content: resposta });
-
-    // Tenta resumir se ficar muito longo
-    if (historico.length > 12) {
-      try {
-        const novoResumo = await resumirConversa(ai, historico);
-        salvarResumo(novoResumo);
-        historico = historico.slice(-6);
-      } catch (e) { console.log("Erro resumo", e); }
+    } catch (aiError) {
+      console.error("Erro direto do Gemini:", aiError);
+      return response.status(500).json({
+        error: `Erro ao falar com o Google: ${aiError.message || 'Erro desconhecido'}`
+      });
     }
 
-    salvarHistorico(historico);
-
-    return response.status(200).json({ text: resposta });
-
   } catch (err) {
-    console.error("Erro na API:", err);
-    return response.status(500).json({ error: "Erro interno na IA." });
+    console.error("Erro Geral na API:", err);
+    return response.status(500).json({ error: `Erro interno no servidor: ${err.message}` });
   }
 }
