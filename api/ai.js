@@ -1,9 +1,9 @@
 // api/ai.js
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 try { import('dotenv').then(d => d.config()).catch(()=>{}) } catch(e){}
 
-let genAIInstance = null;
+const ai = new GoogleGenAI({});
 
 export async function criarCliente() {
   if (!process.env.GEMINI_API_KEY) throw new Error("Sem chave API");
@@ -13,7 +13,7 @@ export async function criarCliente() {
 
 export async function gerarResposta(ai, historico, prompt) {
   // Tenta o modelo padrão 'gemini-pro'
-  const model = ai.getGenerativeModel({ model: "gemini-pro" });
+  const model = ai.getGenerativeModel({ model: "gemini-3-pro-preview" });
   const result = await model.generateContent(prompt);
   const response = await result.response;
   return response.text();
