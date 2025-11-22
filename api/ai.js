@@ -1,8 +1,7 @@
 // api/ai.js
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Tenta carregar dotenv apenas se não estiver em produção (opcional)
-// Na Vercel, as variáveis já estão em process.env
+// Tenta carregar dotenv apenas se não estiver em produção
 try {
   import('dotenv').then(dotenv => dotenv.config()).catch(() => { });
 } catch (e) {
@@ -26,8 +25,9 @@ export async function criarCliente() {
 }
 
 export async function resumirConversa(ai, historico) {
+  // Se o histórico for pequeno, não resume
   if (!historico || historico.length <= 6) {
-    return historico.map(m => `${m.role}: ${m.content}`).join("\n");
+    return "";
   }
 
   const texto = historico
@@ -41,19 +41,21 @@ ${texto}
 RESUMO:`;
 
   try {
-    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // MUDANÇA AQUI: Usando 'gemini-pro' que é mais estável
+    const model = ai.getGenerativeModel({ model: "gemini-pro" });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     return response.text();
   } catch (error) {
     console.error("Erro ao resumir:", error);
-    return texto.substring(texto.length - 2000);
+    return "";
   }
 }
 
 export async function gerarResposta(ai, historico, novaMensagem) {
   try {
-    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // MUDANÇA AQUI: Usando 'gemini-pro' para garantir compatibilidade
+    const model = ai.getGenerativeModel({ model: "gemini-pro" });
 
     const result = await model.generateContent(novaMensagem);
     const response = await result.response;
