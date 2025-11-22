@@ -1,18 +1,16 @@
 // api/ai.js
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Tenta carregar dotenv apenas se não estiver em produção
 try {
-  import('dotenv').then(dotenv => dotenv.config()).catch(() => { });
+    import('dotenv').then(dotenv => dotenv.config()).catch(() => {});
 } catch (e) {
-  // Ignora erro se dotenv não existir
 }
 
 let genAIInstance = null;
 
 export async function criarCliente() {
   const apiKey = process.env.GEMINI_API_KEY;
-
+  
   if (!apiKey) {
     throw new Error("GEMINI_API_KEY não encontrada. Verifique as Variáveis de Ambiente na Vercel.");
   }
@@ -20,12 +18,11 @@ export async function criarCliente() {
   if (!genAIInstance) {
     genAIInstance = new GoogleGenerativeAI(apiKey);
   }
-
+  
   return genAIInstance;
 }
 
 export async function resumirConversa(ai, historico) {
-  // Se o histórico for pequeno, não resume
   if (!historico || historico.length <= 6) {
     return "";
   }
@@ -41,8 +38,7 @@ ${texto}
 RESUMO:`;
 
   try {
-    // MUDANÇA AQUI: Usando 'gemini-pro' que é mais estável
-    const model = ai.getGenerativeModel({ model: "gemini-pro" });
+    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     return response.text();
@@ -54,9 +50,8 @@ RESUMO:`;
 
 export async function gerarResposta(ai, historico, novaMensagem) {
   try {
-    // MUDANÇA AQUI: Usando 'gemini-pro' para garantir compatibilidade
-    const model = ai.getGenerativeModel({ model: "gemini-pro" });
-
+    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+    
     const result = await model.generateContent(novaMensagem);
     const response = await result.response;
     return response.text();
