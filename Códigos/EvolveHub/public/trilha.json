@@ -1,9 +1,0 @@
-{
-  "trilha": [
-    { "id": 1, "nome": "Introdução ao Design Thinking", "completo": true, "descricao": "Fundamentos e processos." },
-    { "id": 2, "nome": "Fundamentos de UX", "completo": true, "descricao": "Pesquisa e prototipagem." },
-    { "id": 3, "nome": "React Básico", "completo": false, "descricao": "Componentes, props, state." },
-    { "id": 4, "nome": "React Avançado", "completo": false, "descricao": "Hooks, performance." },
-    { "id": 5, "nome": "IA para Profissionais", "completo": false, "descricao": "Introdução ao uso de APIs de IA." }
-  ]
-}

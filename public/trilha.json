@@ -1,0 +1,22 @@
+{
+  "trilha": [
+    {
+      "id": 1,
+      "nome": "React Básico",
+      "descricao": "Componentes e Hooks",
+      "completo": true
+    },
+    {
+      "id": 2,
+      "nome": "Node.js API",
+      "descricao": "Express e Rotas",
+      "completo": false
+    },
+    {
+      "id": 3,
+      "nome": "UX Design",
+      "descricao": "Princípios básicos",
+      "completo": false
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+/* src/pages/Dashboard.css */
+
+/* Novo Fundo do Header */
+.dashboard-header-bg {
+  background: linear-gradient(135deg, #fff8e1 0%, #ffffff 100%);
+  border-bottom: 1px solid #f1f3f5;
+  padding-bottom: 3rem;
+}
+
+.mt-n5 {
+  margin-top: -3rem !important;
+}
+
+/* Efeito Hover nos Cards */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Card de Curso no Dashboard */
+.course-card-dash {
+  border-left: 4px solid #ffc107 !important;
+  transition: all 0.2s;
+}
+
+.course-card-dash:hover {
+  background-color: #fffefae0;
+}

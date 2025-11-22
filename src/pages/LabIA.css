@@ -1,0 +1,269 @@
+/* 1. Wrapper da Página e Fundo Gradiente Principal */
+.lab-ia-page {
+    /* Fundo branco com gradientes sutis */
+    background: radial-gradient(at 80% 20%, #fff8e1 0px, transparent 50%),
+                radial-gradient(at 20% 80%, #e3f2fd 0px, transparent 50%),
+                #ffffff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. Conteúdo Centralizado */
+.content-wrapper {
+    max-width: 1000px;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 10;
+}
+
+/* 3. Logo e Cabeçalho */
+.lab-ia-logo {
+    width: 50px;
+    height: 50px;
+    background-color: #FD7E14;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(253, 126, 20, 0.2);
+}
+
+.lab-ia-logo span {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.lab-ia-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #343a40;
+    margin: 0;
+}
+
+/* 4. Área de Chat (Scrollável) */
+.chat-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem 2rem 0 2rem; 
+    scrollbar-width: thin;
+    scrollbar-color: #dee2e6 transparent;
+}
+
+.chat-area::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+.chat-area::-webkit-scrollbar-thumb {
+    background-color: #dee2e6;
+    border-radius: 20px;
+}
+
+/* 5. Bolhas de Mensagem */
+.message-bubble {
+    max-width: 85%;
+    padding: 12px 20px;
+    border-radius: 18px;
+    font-size: 1rem;
+    line-height: 1.5;
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.user-bubble {
+    background-color: #007bff;
+    color: white;
+    border-bottom-right-radius: 4px;
+    margin-left: auto;
+}
+
+.ai-bubble {
+    background-color: #ffffff;
+    color: #343a40;
+    border: 1px solid #dee2e6;
+    border-bottom-left-radius: 4px;
+    margin-right: auto;
+}
+
+.message-icon {
+    font-size: 1.2em;
+    flex-shrink: 0;
+}
+
+/* 6. Sugestões */
+.suggestions-section {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.suggestions-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+.suggestion-card {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #dee2e6;
+    border-radius: 1rem;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    color: #495057;
+    font-size: 0.95rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.suggestion-card:hover {
+    background-color: #ffffff;
+    border-color: #007bff;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+}
+
+/* 7. Área de Input (Transparente e sem bordas) */
+.input-area {
+    background: transparent !important; 
+    border: none !important;            
+    box-shadow: none !important;       
+    padding: 1rem 1rem 2rem 1rem;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 20;
+}
+
+/* Container do formulário */
+.input-area form {
+    width: 100%;
+    max-width: 100%;
+}
+
+.main-chat-input {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef; 
+    border-radius: 2rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); 
+    transition: all 0.2s ease-in-out;
+    font-size: 1rem;
+    color: #343a40;
+    width: 100%;
+}
+
+.main-chat-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 10px 35px rgba(0, 123, 255, 0.15);
+    outline: none;
+}
+
+.main-chat-input::placeholder {
+    color: #adb5bd;
+}
+
+/* Botão de envio */
+.send-button {
+    background: #007bff;
+    border: none;
+    color: white !important;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.send-button:hover:not(:disabled) {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.send-button:disabled {
+    background-color: #e9ecef;
+    color: #adb5bd !important;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Container das bolinhas */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+  padding: 5px 0; 
+}
+
+/* As bolinhas individuais */
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  background-color: #6c757d;
+  border-radius: 50%;
+  display: block;
+  opacity: 0.4;
+  animation: bounce 1s infinite ease-in-out;
+}
+
+/* Delays para criar o efeito de onda */
+.typing-indicator span:nth-child(1) {
+  animation-delay: 0s;
+}
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* A animação do pulo */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-6px); 
+    opacity: 1;
+  }
+}
+
+/* Ajustes Responsivos */
+@media (max-width: 768px) {
+    .lab-ia-title {
+        font-size: 1.5rem;
+    }
+    .message-bubble {
+        max-width: 90%;
+        padding: 10px 15px;
+    }
+    .input-area {
+        padding: 0.5rem 1rem 1rem 1rem;
+    }
+    .chat-area {
+        padding: 1rem 0.5rem;
+    }
+}
