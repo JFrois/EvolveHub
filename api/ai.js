@@ -1,7 +1,13 @@
 // api/ai.js
-import dotenv from 'dotenv';
-dotenv.config(); // Garante que o .env seja lido
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// Tenta carregar dotenv apenas se não estiver em produção (opcional)
+// Na Vercel, as variáveis já estão em process.env
+try {
+  import('dotenv').then(dotenv => dotenv.config()).catch(() => { });
+} catch (e) {
+  // Ignora erro se dotenv não existir
+}
 
 let genAIInstance = null;
 
@@ -9,7 +15,7 @@ export async function criarCliente() {
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    throw new Error("GEMINI_API_KEY não encontrada no arquivo .env");
+    throw new Error("GEMINI_API_KEY não encontrada. Verifique as Variáveis de Ambiente na Vercel.");
   }
 
   if (!genAIInstance) {
@@ -35,7 +41,6 @@ ${texto}
 RESUMO:`;
 
   try {
-    // CORRIGIDO: Modelo atualizado para 1.5-flash
     const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
     const response = await result.response;
