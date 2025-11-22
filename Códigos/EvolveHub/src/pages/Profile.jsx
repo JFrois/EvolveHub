@@ -65,12 +65,12 @@ function Profile() {
                     >
                         <QuestionCircleFill />
                     </Nav.Link>
-                    <Nav.Link 
+                    {/* <Nav.Link 
                         as={Link} to="/settings" 
                         className={`sidebar-link ${location.pathname.includes('/settings') ? 'active' : ''}`}
                     >
                         <GearFill />
-                    </Nav.Link>
+                    </Nav.Link> */}
                 </Nav>
             </nav>
 
@@ -80,14 +80,14 @@ function Profile() {
                 {/* 3. CABEÇALHO (TOPO) */}
                 <header className="profile-header">
                     <div className="header-welcome">
-                        <h1>Welcome, {user.nickName}</h1>
-                        <p>Tue, 13 November 2025</p>
+                        <h1>Bem vindo, {user.nickName}</h1>
+                        <p>22 de novembro de 2025</p>
                     </div>
 
                     <div className="d-flex align-items-center gap-3">
                         <div className="search-bar-container">
                             <Search className="search-icon" />
-                            <Form.Control type="search" placeholder="Search" className="search-bar" />
+                            <Form.Control type="search" placeholder="Pesquisar" className="search-bar" />
                         </div>
                         <Image src={userAvatar} alt="User Avatar" className="header-avatar" roundedCircle />
                     </div>
@@ -105,7 +105,7 @@ function Profile() {
                             <h2>{user.fullName}</h2>
                             <p>{user.email}</p>
                         </div>
-                        <Button className="btn-edit-profile">Edit</Button>
+                        <Button className="btn-edit-profile">Editar</Button>
                     </div>
 
                     {/* Formulário de Perfil */}
@@ -113,23 +113,23 @@ function Profile() {
                         <Form>
                             <Row className="form-grid">
                                 <Col md={6} className="form-section">
-                                    <Form.Label htmlFor="fullName">Full Name</Form.Label>
+                                    <Form.Label htmlFor="fullName">Nome completo</Form.Label>
                                     <Form.Control type="text" id="fullName" defaultValue={user.fullName} />
                                 </Col>
                                 <Col md={6} className="form-section">
-                                    <Form.Label htmlFor="nickName">Nick Name</Form.Label>
+                                    <Form.Label htmlFor="nickName">Apelido</Form.Label>
                                     <Form.Control type="text" id="nickName" defaultValue={user.nickName} />
                                 </Col>
                                 <Col md={6} className="form-section">
-                                    <Form.Label htmlFor="gender">Gender</Form.Label>
+                                    <Form.Label htmlFor="gender">Gênero</Form.Label>
                                     <Form.Select id="gender" defaultValue={user.gender}>
-                                        <option>Female</option>
-                                        <option>Male</option>
-                                        <option>Other</option>
+                                        <option>Feminino</option>
+                                        <option>Masculino</option>
+                                        <option>Outro</option>
                                     </Form.Select>
                                 </Col>
                                 <Col md={6} className="form-section">
-                                    <Form.Label htmlFor="country">Country</Form.Label>
+                                    <Form.Label htmlFor="country">País</Form.Label>
                                     <Form.Select id="country" defaultValue={user.country}>
                                         <option>Brazil</option>
                                         <option>United States</option>
@@ -137,14 +137,14 @@ function Profile() {
                                     </Form.Select>
                                 </Col>
                                 <Col md={6} className="form-section">
-                                    <Form.Label htmlFor="language">Language</Form.Label>
+                                    <Form.Label htmlFor="language">Idioma</Form.Label>
                                     <Form.Select id="language" defaultValue={user.language}>
                                         <option>Portuguese (BR)</option>
                                         <option>English (US)</option>
                                     </Form.Select>
                                 </Col>
                                 <Col md={6} className="form-section">
-                                    <Form.Label htmlFor="timeZone">Time Zone</Form.Label>
+                                    <Form.Label htmlFor="timeZone">Fuso</Form.Label>
                                     <Form.Select id="timeZone" defaultValue={user.timeZone}>
                                         <option>(GMT-03:00) Brasilia</option>
                                         <option>(GMT-05:00) Eastern Time</option>
@@ -157,7 +157,7 @@ function Profile() {
 
                         {/* Seção de Email */}
                         <div className="email-section">
-                            <h3 className="email-section-title">My email Address</h3>
+                            <h3 className="email-section-title">Email</h3>
                             <div className="email-item">
                                 <EnvelopeFill className="email-icon" />
                                 <div className="email-info">
@@ -165,7 +165,7 @@ function Profile() {
                                     <span>1 month ago</span>
                                 </div>
                             </div>
-                            <Button className="btn-add-email">+ Add Email Address</Button>
+                            <Button className="btn-add-email">+ Adicionar novo email</Button>
                         </div>
                     </div>
                 </div>

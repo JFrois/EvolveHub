@@ -9,7 +9,7 @@ function Admin() {
                 <Col>
                     <h2 className="text-center">Página de Admin</h2>
                     <p className="lead text-center text-muted">
-                        Área de gestão para adicionar novas skills.
+                        Área de gestão para adicionar novas skills Teste.
                     </p>
                     {/* Conteúdo do Admin virá aqui (formulário de adicionar skill) */}
                 </Col>

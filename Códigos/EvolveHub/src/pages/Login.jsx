@@ -42,7 +42,7 @@ function Login({ onLoginSuccess }) {
             <div className="login-form-column">
                 <div className="login-form-container">
                     
-                    <h2 className="login-title">Login to your Account</h2>
+                    <h2 className="login-title">LOGIN</h2>
                     
                     {/* Exibe o Alert de erro, se existir */}
                     {erro && <Alert variant="danger" className="mb-3">{erro}</Alert>}
@@ -52,7 +52,7 @@ function Login({ onLoginSuccess }) {
                             <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
-                                placeholder="Enter your Email here"
+                                placeholder="Digite seu email aqui"
                                 className="login-input"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -61,10 +61,10 @@ function Login({ onLoginSuccess }) {
                         </Form.Group>
 
                         <Form.Group className="login-form-group" controlId="formLoginPassword">
-                            <Form.Label>Password</Form.Label>
+                            <Form.Label>Senha</Form.Label>
                             <Form.Control
                                 type="password"
-                                placeholder="Enter your Password here"
+                                placeholder="Digite sua senha aqui"
                                 className="login-input"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -78,10 +78,10 @@ function Login({ onLoginSuccess }) {
                     </Form>
 
                     <p className="login-secondary-link">
-                        Don't have an account? <Link to="/criar-conta">Sign Up</Link>
+                       Não tem cadastro? <Link to="/criar-conta">Crie seu cadastro</Link>
                     </p>
                     
-                    <div className="login-divider">- OR -</div>
+                    {/* <div className="login-divider">- OR -</div>
 
                     <Button className="btn-social-login">
                         <Google size={20} />
@@ -91,7 +91,7 @@ function Login({ onLoginSuccess }) {
                     <Button className="btn-social-login">
                         <Github size={20} />
                         Sign in with GitHub
-                    </Button>
+                    </Button> */}
 
                 </div>
             </div>

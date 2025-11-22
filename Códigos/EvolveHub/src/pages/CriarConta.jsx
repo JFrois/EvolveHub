@@ -51,7 +51,7 @@ function SignUp({ onLoginSuccess }) {
             <div className="login-form-column">
                 <div className="login-form-container">
                     
-                    <h2 className="login-title">Create your Account</h2>
+                    <h2 className="login-title">Crie sua conta</h2>
                     
                     {/* Exibe o Alert de erro, se existir */}
                     {erro && <Alert variant="danger" className="mb-3">{erro}</Alert>}
@@ -61,7 +61,7 @@ function SignUp({ onLoginSuccess }) {
                             <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
-                                placeholder="Enter your Email here"
+                                placeholder="Digite seu email aqui"
                                 className="login-input"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -72,8 +72,8 @@ function SignUp({ onLoginSuccess }) {
                         <Form.Group className="login-form-group" controlId="formSignUpPassword">
                             <Form.Label>Password</Form.Label>
                             <Form.Control
-                                type="password"
-                                placeholder="Enter your Password here"
+                                type="Senha"
+                                placeholder="Digite sua senha aqui"
                                 className="login-input"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -83,10 +83,10 @@ function SignUp({ onLoginSuccess }) {
                         </Form.Group>
 
                         <Form.Group className="login-form-group" controlId="formConfirmPassword">
-                            <Form.Label>Confirm Password</Form.Label>
+                            <Form.Label>Confirme sua senha</Form.Label>
                             <Form.Control
                                 type="password"
-                                placeholder="Confirm your Password here"
+                                placeholder="Confirme sua senha aqui"
                                 className="login-input"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -96,12 +96,12 @@ function SignUp({ onLoginSuccess }) {
                         </Form.Group>
 
                         <Button className="btn-login-primary" type="submit">
-                            Create Account
+                            Criar conta
                         </Button>
                     </Form>
 
                     <p className="login-secondary-link">
-                        Already have an account? <Link to="/login">Login</Link>
+                        Já possui conta? <Link to="/login">Login</Link>
                     </p>
 
                 </div>
